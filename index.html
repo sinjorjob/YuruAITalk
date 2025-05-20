@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ゆるっとAI対話室 - 公式プロモーションページ</title>
+    <meta name="description" content="AIと人との対話を通じて様々なテーマを「ゆるっと」掘り下げる、ゆるっとAI対話室の公式プロモーションページ">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81'
+                        },
+                        secondary: {
+                            100: '#ddd6fe',
+                            200: '#c4b5fd',
+                            300: '#a78bfa',
+                            400: '#8b5cf6',
+                            500: '#7c3aed',
+                            600: '#6d28d9',
+                            700: '#5b21b6',
+                            800: '#4c1d95',
+                            900: '#3c1e70'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans JP', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom CSS -->
+    <style>
+        /* Custom styles for the Yuru AI Talk promo website */
+
+        :root {
+          --primary-light: #e0e7ff;
+          --primary: #818cf8;
+          --primary-dark: #4f46e5;
+          --secondary-light: #ddd6fe;
+          --secondary: #a78bfa;
+          --secondary-dark: #7c3aed;
+          --text-dark: #1f2937;
+          --text-light: #6b7280;
+          --background-light: #f9fafb;
+          --background-dark: #f3f4f6;
+        }
+
+        body {
+          min-height: 100vh;
+          overflow: hidden; /* Keep main container overflow handling */
+          font-family: 'Inter', 'Noto Sans JP', sans-serif;
+          background-color: var(--background-light);
+        }
+
+        .main-container {
+            /* The main container holds the slideshow area and the sidebar */
+            /* Ensure it takes up the full viewport height and width */
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling on the main container */
+        }
+
+        /* Styles for the slideshow area */
+        main {
+            /* Takes up flexible space, handles its own overflow */
+            flex-grow: 1;
+            flex-shrink: 1;
+            min-width: 0; /* Allow main to shrink */
+            overflow: hidden; /* Slides inside handle the content overflow */
+            display: flex; /* Added to make main a flex container */
+            flex-direction: column; /* Stack slideshow and nav vertically */
+        }
+
+        #slideshow-container {
+            flex-grow: 1; /* Allow slideshow to take available vertical space */
+            position: relative; /* For absolute positioning of slides */
+            overflow: hidden; /* Clip slides */
+        }
+
+
+        /* Styles for the sidebar */
+        .sidebar {
+          background: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
+          backdrop-filter: blur(10px); /* Increased blur */
+          border-left: 1px solid rgba(229, 231, 235, 0.7); /* Softer border */
+          transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+          flex-shrink: 0; 
+          /* Tailwind classes: w-80 h-full overflow-y-auto p-6 flex flex-col */
+        }
+
+        /* Custom slide transitions */
+        .slide-container {
+          position: absolute; 
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%; 
+          transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+          /* Tailwind classes: flex justify-center items-center p-8 overflow-hidden */
+          overflow-y: auto; /* Allow scrolling within slide content if it exceeds height */
+        }
+
+        .slide-container.inactive {
+          opacity: 0;
+          transform: scale(0.98) translateY(15px); /* More subtle entry animation */
+          pointer-events: none; 
+          z-index: 0; /* Ensure inactive slides are behind active */
+        }
+
+        .slide-container.active {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+          pointer-events: auto; 
+          z-index: 1; 
+        }
+
+
+        /* Progress bar styling */
+        .progress-bar {
+          background: linear-gradient(to right, var(--primary), var(--secondary)); /* Use stronger colors */
+          height: 4px;
+          transition: width 0.3s ease-in-out; /* Smoother transition */
+          border-radius: 4px;
+        }
+
+        /* Navigation controls */
+        .nav-button {
+          transition: all 0.2s ease-out; /* Faster transition */
+        }
+
+        .nav-button:hover {
+          transform: scale(1.08); /* Slightly less aggressive hover */
+          box-shadow: 0 8px 20px -3px rgba(0, 0, 0, 0.08), 0 8px 8px -3px rgba(0, 0, 0, 0.03); /* Softer shadow */
+        }
+
+        .nav-button:active {
+          transform: scale(0.96); /* Consistent active scale */
+        }
+
+        /* Pagination dots */
+        .pagination-dot {
+            transition: all 0.2s ease-out;
+        }
+        .pagination-dot:hover {
+            transform: scale(1.2); /* Add hover effect to dots */
+        }
+
+
+        /* Gradient Text for specific elements */
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary-dark), var(--secondary-dark)); 
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+
+        /* Mobile Styles */
+        @media (max-width: 767px) { /* Using 767px to avoid conflict with Tailwind's md (768px) */
+          .main-container {
+            flex-direction: column; 
+            height: auto; 
+            overflow-y: auto; 
+          }
+
+          main {
+              height: auto; 
+              min-height: 100vh; /* Ensure main content takes at least full viewport height on mobile */
+              overflow-y: visible; 
+          }
+
+          #slideshow-container {
+              min-height: calc(100vh - 88px); /* Adjust based on nav height, 88px is an estimate for nav bar */
+          }
+
+          .slide-container {
+              position: relative; /* Changed from static to relative for better control if needed, but mostly static behavior */
+              height: auto; 
+              min-height: calc(100vh - 88px); /* Ensure slide itself is tall enough */
+              overflow-y: visible; 
+              padding-top: 2rem; 
+              padding-bottom: 2rem;
+              /* remove absolute positioning for mobile flow */
+              opacity: 1 !important; /* Ensure visibility as active/inactive might not apply same way */
+              transform: none !important; 
+              display: none; /* Hide all by default on mobile */
+          }
+
+          .slide-container.active {
+              display: flex; /* Only show active slide */
+          }
+
+           .slide-container > div {
+               padding: 0 1rem; 
+           }
+
+            .slide-container .flex-col.md\:flex-row {
+                flex-direction: column !important; /* Force column stack */
+            }
+
+            .slide-container .flex-1 {
+                width: 100% !important; /* Full width for flex items */
+            }
+
+            .slide-container .md\:text-left {
+                text-align: center !important; 
+            }
+
+             .slide-container .md\:items-start {
+                 align-items: center !important; 
+             }
+
+            .slide-container .md\:block {
+                display: none !important; /* Hide desktop-only right column in slide */
+            }
+
+          .sidebar {
+            position: fixed; 
+            top: 0;
+            right: 0;
+            bottom: 0; 
+            width: 80vw; 
+            max-width: 300px; /* Slightly narrower max */
+            transform: translateX(100%); 
+            z-index: 100; /* Ensure sidebar is on top of mobile content */
+            border-top: none;
+            border-left: 1px solid rgba(229, 231, 235, 0.8);
+            overflow-y: auto; 
+          }
+
+          .sidebar:not(.translate-x-full) { /* When sidebar is open */
+              transform: translateX(0); 
+          }
+
+          .sidebar-overlay {
+              /* Tailwind hidden md:hidden used in main.js ensures it's only for mobile */
+              z-index: 99; /* Below sidebar but above content */
+          }
+
+          .sidebar-toggle {
+            display: flex !important; /* Ensure toggle is visible on mobile, use flex for centering icon if needed */
+            align-items: center;
+            justify-content: center;
+          }
+        }
+
+        /* Tagline animation */
+        #rotating-tagline {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased bg-gray-50 text-gray-800">
+    <div class="main-container flex h-screen w-screen overflow-hidden">
+        <!-- Main Slideshow Area -->
+        <main class="flex-1 h-full flex flex-col">
+            <div id="slideshow-container" class="flex-1 relative overflow-hidden"></div>
+            
+            <!-- Navigation Controls -->
+            <div class="px-8 py-4 bg-white border-t border-gray-200">
+                <div class="flex items-center justify-between">
+                    <button id="prev-button" class="nav-button bg-white p-2 rounded-full shadow-md hover:shadow-lg transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    
+                    <div class="flex flex-col items-center">
+                        <div id="pagination" class="flex space-x-2 mb-2"></div>
+                        <div class="w-64 h-1 bg-gray-200 rounded-full">
+                            <div id="progress-bar" class="progress-bar w-0"></div>
+                        </div>
+                        <div id="slide-counter" class="text-sm text-gray-500 mt-2">1 / 9</div>
+                    </div>
+                    
+                    <button id="next-button" class="nav-button bg-white p-2 rounded-full shadow-md hover:shadow-lg transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-80 h-full overflow-y-auto p-6 flex flex-col"></aside>
+    </div>
+    
+    <!-- JavaScript -->
+    <!-- data.js -->
+    <script>
+        const slideData = [
+            {
+                id: 1,
+                title: "「最近、AIって言葉をよく聞くけど…正直、難しそう？」",
+                subtitle: "情報に圧倒される日常",
+                text: "「時代の変化、ちょっと気になるけど、ガチで学ぶ時間はないし…」",
+                imageUrl: "https://r2.flowith.net/files/o/1747715443969-RelaxedFriendlyDialogueBetweenAiAndHuman@1024x1024.png",
+                bgColor: "bg-gray-100"
+            },
+            {
+                id: 2,
+                title: "難しく考えなくて、大丈夫。",
+                subtitle: "肩の力を抜いて",
+                text: "複雑なことも、シンプルに。あなたのペースで理解できる形で。",
+                imageUrl: "https://r2.flowith.net/files/o/1747715443969-RelaxedFriendlyDialogueBetweenAiAndHuman@1024x1024.png", // Re-using image from slide 1 for variety or placeholder
+                bgColor: "bg-primary-100"
+            },
+            {
+                id: 3,
+                title: "ここは、AI時代の「気づき」と「深まる対話」を、もっと「ゆるっと」お届けする場所。",
+                subtitle: "ゆるっとAI対話室へようこそ",
+                text: "難しい専門用語よりも、身近な言葉で。肩の力を抜いた対話から生まれる新しい発見。",
+                imageUrl: "https://r2.flowith.net/files/o/1747715443488-Yurutto_AI_Dialogue_Room_Channel_Logo_Graphic_Design@1024x1024.png",
+                bgColor: "bg-gradient-to-br from-primary-100 to-secondary-100"
+            },
+            {
+                id: 4,
+                title: "「ゆるっとAI対話室」では、AIがあなたの「対話相手」",
+                subtitle: "多様なテーマをやさしく掘り下げる",
+                text: "ビジネスのこと、未来のこと、はたまた歴史上の名言まで…AIと人との「対話」を通して、様々なテーマを「ゆるっと」掘り下げていきます。",
+                imageUrl: "https://r2.flowith.net/files/o/1747719218358-ImageForPromotionalVideoScene4AIConversationRoomConcept@1024x1024.png", // Updated image URL
+                bgColor: "bg-gradient-to-br from-secondary-100 to-primary-100"
+            },
+            {
+                id: 5,
+                title: "専門用語ばかりの難しい話はしません。",
+                subtitle: "いつでも、あなたのペースで",
+                text: "通勤中、休憩中、寝る前…いつでも、あなたのペースで視聴できる、心地よいコンテンツ。",
+                imageUrl: "https://r2.flowith.net/files/o/1747716839876-stylishdailyviewingsceneimage@1536x1024.png",
+                bgColor: "bg-gradient-to-br from-blue-50 to-purple-50"
+            },
+            {
+                id: 6,
+                title: "肩の力を抜いて聞いているうちに、あなたの日常に「ちょっと深い視点」がプラスされるはず。",
+                subtitle: "「なるほど！」「面白い！」…きっと、そんな気づきが見つかります。",
+                text: "難しく考えず、楽しみながら。その中で自然と生まれる「気づき」の瞬間をお届けします。",
+                imageUrl: "https://r2.flowith.net/files/o/1747716823520-Aware_Moment_Character_Expression_Change@1024x1024.png",
+                bgColor: "bg-gradient-to-tr from-green-50 to-yellow-50"
+            },
+            {
+                id: 7,
+                title: "AI時代の波を、無理なく、楽しく乗りこなすヒントが、ここにあります。",
+                subtitle: "多彩なコンテンツで視野を広げる",
+                text: "AIと人との会話から生まれる発見。それがあなたの日常に新しい視点をもたらします。",
+                imageUrl: "https://r2.flowith.net/files/o/1747716829632-Content_Diversity_and_Anticipation_in_AI_Chat_Channel_Thumbnails@1024x1024.png",
+                bgColor: "bg-gradient-to-br from-yellow-50 to-purple-50"
+            },
+            {
+                id: 8,
+                title: "AI時代の『気づき』と『深まる対話』を、もっと『ゆるっと』あなたに。",
+                subtitle: "「ゆるっとAI対話室」チャンネル登録して、新しい扉を開いてみませんか？",
+                text: "あなたの好奇心に、私たちが寄り添います。ぜひチャンネル登録をして、一緒に知的な冒険に出かけましょう。",
+                imageUrl: "https://r2.flowith.net/files/o/1747716838647-Channel_Subscription_Invitation_Visual@1024x1024.png",
+                bgColor: "bg-gradient-to-br from-pink-50 to-blue-50"
+            },
+            {
+                id: 9,
+                title: "あなたのアクセスをお待ちしています！",
+                subtitle: "ゆるっとAI対話室",
+                text: "youtube.com/@YuruAITalk",
+                imageUrl: "https://r2.flowith.net/files/o/1747715443488-Yurutto_AI_Dialogue_Room_Channel_Logo_Graphic_Design@1024x1024.png", // Using channel logo for final slide
+                bgColor: "bg-gradient-to-br from-primary-100 to-secondary-100"
+            }
+        ];
+    </script>
+    
+    <!-- sidebar.js -->
+    <script>
+        const sidebarContent = {
+            logo: "https://r2.flowith.net/files/o/1747715443488-Yurutto_AI_Dialogue_Room_Channel_Logo_Graphic_Design@1024x1024.png",
+            taglines: [
+                "AIともっと気軽に、深く話そう",
+                "あなたの知的好奇心を刺激する、ゆるい対話空間",
+                "難しいことをシンプルに、楽しく理解する場所"
+            ],
+            highlights: [
+                {
+                    title: "多様なテーマ",
+                    description: "ビジネス、歴史、科学、未来など幅広いトピックを探求",
+                    icon: "🔍"
+                },
+                {
+                    title: "わかりやすい対話",
+                    description: "専門用語を避け、身近な言葉でAIと深い会話",
+                    icon: "💬"
+                },
+                {
+                    title: "知的発見",
+                    description: "肩の力を抜いて楽しみながら、新たな気づきを得る",
+                    icon: "💡"
+                },
+                {
+                    title: "あなたのペースで",
+                    description: "いつでもどこでも、自分の時間に合わせて視聴可能",
+                    icon: "⏱️"
+                }
+            ],
+            cta: [
+                {
+                    text: "チャンネル登録して最新情報を見逃すな！",
+                    link: "https://www.youtube.com/@YuruAITalk",
+                    style: "primary"
+                },
+                {
+                    text: "人気の動画はこちら",
+                    link: "https://www.youtube.com/@YuruAITalk/videos",
+                    style: "secondary"
+                }
+            ],
+            socialLinks: [
+                {
+                    platform: "YouTube",
+                    link: "https://www.youtube.com/@YuruAITalk",
+                    icon: "📺"
+                },
+                {
+                    platform: "Twitter",
+                    link: "#", // Placeholder link for Twitter
+                    icon: "🐦"
+                }
+            ]
+        };
+
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
+
+            // Clear existing content
+            sidebar.innerHTML = '';
+
+            // Logo and Channel Name
+            const logoSection = document.createElement('div');
+            logoSection.className = 'mb-6 flex flex-col items-center';
+            logoSection.innerHTML = `
+                <img src="${sidebarContent.logo}" alt="Yuru AI Talk Logo" class="w-32 h-32 rounded-full shadow-lg mb-3">
+                <h2 class="text-xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-500">Yuru AI Talk</h2>
+            `;
+            sidebar.appendChild(logoSection);
+
+            // Rotating Taglines
+            const taglineSection = document.createElement('div');
+            taglineSection.className = 'mb-8 text-center h-20 flex items-center justify-center'; // Fixed height for tagline
+            taglineSection.innerHTML = `<p id="rotating-tagline" class="text-lg font-medium italic text-gray-700 px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg shadow-sm">${sidebarContent.taglines[0]}</p>`;
+            sidebar.appendChild(taglineSection);
+
+            // Highlights
+            const highlightsSection = document.createElement('div');
+            highlightsSection.className = 'mb-8 space-y-4'; // Added space-y
+            
+            sidebarContent.highlights.forEach(highlight => {
+                const highlightItem = document.createElement('div');
+                highlightItem.className = 'flex items-start p-3 rounded-lg hover:bg-gray-50 transition-colors'; // Added padding and hover
+                highlightItem.innerHTML = `
+                    <div class="mr-3 bg-gradient-to-r from-blue-100 to-purple-100 p-2 rounded-full flex-shrink-0 shadow-sm">
+                        <span class="text-xl">${highlight.icon}</span>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-800">${highlight.title}</h3>
+                        <p class="text-sm text-gray-600">${highlight.description}</p>
+                    </div>
+                `;
+                highlightsSection.appendChild(highlightItem);
+            });
+            sidebar.appendChild(highlightsSection);
+
+            // CTA Buttons
+            const ctaSection = document.createElement('div');
+            ctaSection.className = 'mb-8 space-y-3';
+            
+            sidebarContent.cta.forEach(button => {
+                const ctaButton = document.createElement('a');
+                ctaButton.href = button.link;
+                ctaButton.target = "_blank";
+                ctaButton.className = button.style === 'primary' 
+                    ? 'block w-full py-3 px-4 text-center rounded-lg font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5' // Adjusted transform
+                    : 'block w-full py-3 px-4 text-center rounded-lg font-medium text-gray-700 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 transition-all border border-gray-300 hover:shadow-md transform hover:-translate-y-0.5'; // Adjusted transform
+                ctaButton.innerHTML = `${button.text} <span class="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">&rarr;</span>`; // Arrow with animation
+                ctaSection.appendChild(ctaButton);
+            });
+            sidebar.appendChild(ctaSection);
+
+            // Social Media Links
+            const socialSection = document.createElement('div');
+            socialSection.className = 'flex justify-center space-x-4 mt-auto pt-6 border-t border-gray-200'; // Added padding-top and border
+            
+            sidebarContent.socialLinks.forEach(social => {
+                const socialLink = document.createElement('a');
+                socialLink.href = social.link;
+                socialLink.target = "_blank";
+                socialLink.className = 'p-2 rounded-full bg-gradient-to-r from-gray-100 to-gray-200 hover:from-blue-100 hover:to-purple-100 transition-all shadow-sm hover:shadow-md transform hover:scale-110'; // Enhanced hover effects
+                socialLink.innerHTML = `<span class="text-2xl" title="${social.platform}">${social.icon}</span>`;
+                socialSection.appendChild(socialLink);
+            });
+            sidebar.appendChild(socialSection);
+
+            // Setup tagline rotation
+            let currentTagline = 0;
+            const taglineElement = document.getElementById('rotating-tagline');
+            
+            if (taglineElement) { // Check if element exists
+                setInterval(() => {
+                    currentTagline = (currentTagline + 1) % sidebarContent.taglines.length;
+                    
+                    // Fade out effect
+                    taglineElement.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        taglineElement.textContent = sidebarContent.taglines[currentTagline];
+                        // Fade in effect
+                        taglineElement.style.opacity = '1';
+                    }, 500); // Match CSS transition time
+                }, 5000); // Change tagline every 5 seconds
+
+                // Initial styles for smooth transition
+                taglineElement.style.transition = 'opacity 0.5s ease-in-out';
+                taglineElement.style.opacity = '1';
+            }
+        }
+    </script>
+    
+    <!-- main.js -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentSlide = 1;
+            const totalSlides = slideData.length;
+            
+            // Initialize the first slide and sidebar
+            initializeSlideshow();
+            renderSidebar(); // Assuming renderSidebar is defined in sidebar.js and should be called
+            
+            // Setup event listeners
+            setupNavigation();
+            setupKeyboardNavigation();
+            handleTouchEvents();
+            
+            // Display the current slide and update navigation
+            function updateSlideDisplay() {
+                // Hide all slides
+                document.querySelectorAll('.slide-container').forEach(slide => {
+                    slide.classList.add('inactive');
+                    slide.classList.remove('active');
+                });
+                
+                // Show current slide
+                const currentSlideElement = document.getElementById(`slide-${currentSlide}`);
+                if (currentSlideElement) {
+                    currentSlideElement.classList.remove('inactive');
+                    currentSlideElement.classList.add('active');
+                }
+                
+                // Update progress indicator
+                updateProgressBar();
+                
+                // Update navigation buttons state
+                updateNavigationState();
+
+                // Update pagination dots state
+                updatePaginationDots();
+            }
+
+            function updatePaginationDots() {
+                document.querySelectorAll('.pagination-dot').forEach(dot => {
+                    if (parseInt(dot.getAttribute('data-slide')) === currentSlide) {
+                        dot.classList.add('bg-primary-500');
+                        dot.classList.remove('bg-gray-300', 'hover:bg-gray-400');
+                    } else {
+                        dot.classList.remove('bg-primary-500');
+                        dot.classList.add('bg-gray-300', 'hover:bg-gray-400');
+                    }
+                });
+            }
+            
+            function updateProgressBar() {
+                const progressPercentage = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+                document.getElementById('progress-bar').style.width = `${progressPercentage}%`;
+                
+                // Update slide counter
+                document.getElementById('slide-counter').textContent = `${currentSlide} / ${totalSlides}`;
+            }
+            
+            function updateNavigationState() {
+                // Enable/disable prev button
+                const prevButton = document.getElementById('prev-button');
+                if (currentSlide === 1) {
+                    prevButton.classList.add('opacity-50', 'cursor-not-allowed');
+                    prevButton.disabled = true;
+                } else {
+                    prevButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    prevButton.disabled = false;
+                }
+                
+                // Enable/disable next button
+                const nextButton = document.getElementById('next-button');
+                if (currentSlide === totalSlides) {
+                    nextButton.classList.add('opacity-50', 'cursor-not-allowed');
+                    nextButton.disabled = true;
+                } else {
+                    nextButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    nextButton.disabled = false;
+                }
+            }
+            
+            function goToSlide(slideNumber) {
+                if (slideNumber < 1 || slideNumber > totalSlides) return;
+                
+                currentSlide = slideNumber;
+                updateSlideDisplay();
+            }
+            
+            function nextSlide() {
+                if (currentSlide < totalSlides) {
+                    currentSlide++;
+                    updateSlideDisplay();
+                }
+            }
+            
+            function prevSlide() {
+                if (currentSlide > 1) {
+                    currentSlide--;
+                    updateSlideDisplay();
+                }
+            }
+            
+            function setupNavigation() {
+                // Next button
+                document.getElementById('next-button').addEventListener('click', nextSlide);
+                
+                // Previous button
+                document.getElementById('prev-button').addEventListener('click', prevSlide);
+                
+                // Pagination dots
+                document.querySelectorAll('.pagination-dot').forEach(dot => {
+                    dot.addEventListener('click', function() {
+                        const slideNumber = parseInt(this.getAttribute('data-slide'));
+                        goToSlide(slideNumber);
+                    });
+                });
+            }
+            
+            function setupKeyboardNavigation() {
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowRight' || e.key === ' ') { // Added spacebar for next slide
+                        e.preventDefault(); // Prevent spacebar from scrolling page
+                        nextSlide();
+                    } else if (e.key === 'ArrowLeft') {
+                        prevSlide();
+                    }
+                });
+            }
+            
+            function handleTouchEvents() {
+                let touchStartX = 0;
+                let touchEndX = 0;
+                
+                const slideshowContainer = document.getElementById('slideshow-container');
+                
+                slideshowContainer.addEventListener('touchstart', function(e) {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+                
+                slideshowContainer.addEventListener('touchend', function(e) {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+                
+                function handleSwipe() {
+                    const threshold = 50; // Minimum distance required for swipe
+                    
+                    if (touchEndX < touchStartX - threshold) {
+                        // Swiped left, go to next slide
+                        nextSlide();
+                    } else if (touchEndX > touchStartX + threshold) {
+                        // Swiped right, go to previous slide
+                        prevSlide();
+                    }
+                }
+            }
+            
+            function initializeSlideshow() {
+                // Create slideshow container
+                const slideshowContainer = document.getElementById('slideshow-container');
+                
+                // Generate slide HTML
+                slideData.forEach(slide => {
+                    const slideElement = document.createElement('div');
+                    slideElement.id = `slide-${slide.id}`;
+                    // Use flexbox for layout inside slide, ensuring content within is centered
+                    slideElement.className = `slide-container inactive w-full h-full flex justify-center items-center p-8 overflow-hidden ${slide.bgColor}`;
+                    
+                    let contentHtml = '';
+                    if (slide.id === 1) {
+                        // Single image layout for intro (Slide 1) - Centered layout
+                        contentHtml = `
+                            <div class="flex flex-col items-center text-center max-w-4xl w-full">
+                                <img src="${slide.imageUrl}" alt="${slide.subtitle}" class="w-full max-w-lg h-auto rounded-xl shadow-lg mb-8 object-cover">
+                                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">${slide.title}</h2>
+                                <h3 class="text-xl md:text-2xl text-gray-600 mb-5">${slide.subtitle}</h3>
+                                <p class="text-gray-700 max-w-md text-lg">${slide.text}</p>
+                            </div>
+                        `;
+                    } else if (slide.id === 9) {
+                         // Logo/CTA slide for outro (Slide 9) - Centered layout
+                         contentHtml = `
+                            <div class="flex flex-col items-center text-center max-w-4xl w-full">
+                                <img src="${slide.imageUrl}" alt="ゆるっとAI対話室 ロゴ" class="w-40 h-40 rounded-full shadow-lg mb-6">
+                                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">${slide.subtitle}</h2>
+                                <h3 class="text-2xl md:text-3xl text-gray-600 mb-6">${slide.title}</h3>
+                                 <p class="text-xl md:text-2xl font-semibold text-primary-700 mb-8">${slide.text}</p>
+                                <a href="https://www.youtube.com/@YuruAITalk" target="_blank" class="inline-flex items-center gap-3 bg-red-600 text-white px-8 py-4 rounded-full shadow-lg hover:bg-red-700 transition-colors cursor-pointer text-lg font-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                                    </svg>
+                                    チャンネル登録する
+                                </a>
+                            </div>
+                         `;
+                    }
+                    else { // This applies to slides 2-8, including slide 4
+                        // Apply Slide 1's centered layout to these slides
+                        // This ensures image and text are balanced and centered.
+                        // The image for slide 4 will use the URL from data.js.
+                        contentHtml = `
+                            <div class="flex flex-col items-center text-center max-w-4xl w-full">
+                                <img src="${slide.imageUrl}" alt="${slide.subtitle}" class="w-full max-w-lg h-auto rounded-xl shadow-lg mb-8 object-cover">
+                                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">${slide.title}</h2>
+                                <h3 class="text-xl md:text-2xl text-gray-600 mb-5">${slide.subtitle}</h3>
+                                <p class="text-gray-700 max-w-md text-lg">${slide.text}</p>
+                            </div>
+                         `;
+                    }
+
+                    slideElement.innerHTML = contentHtml;
+                    slideshowContainer.appendChild(slideElement);
+                });
+                
+                // Create pagination dots
+                const paginationContainer = document.getElementById('pagination');
+                slideData.forEach(slide => {
+                    const dot = document.createElement('button');
+                    dot.className = 'pagination-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-all mx-1';
+                    dot.setAttribute('data-slide', slide.id);
+                    dot.setAttribute('aria-label', `Go to slide ${slide.id}`);
+                    paginationContainer.appendChild(dot);
+                });
+                
+                // Initialize the first slide
+                goToSlide(1);
+                
+                // Setup responsive sidebar toggle for mobile
+                setupMobileSidebar();
+            }
+            
+            function setupMobileSidebar() {
+                // Add sidebar toggle button
+                const sidebarToggleButton = document.createElement('button');
+                sidebarToggleButton.className = 'sidebar-toggle fixed bottom-4 right-4 md:hidden bg-white p-3 rounded-full shadow-lg z-50';
+                // Icon: Menu or Info
+                sidebarToggleButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'; // Info icon
+                document.body.appendChild(sidebarToggleButton);
+                
+                const sidebar = document.getElementById('sidebar');
+                
+                // Add overlay for mobile sidebar
+                const overlay = document.createElement('div');
+                overlay.className = 'sidebar-overlay fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden'; // Ensure hidden on desktop
+                document.body.appendChild(overlay);
+
+                sidebarToggleButton.addEventListener('click', function() {
+                    sidebar.classList.toggle('translate-x-full'); // For non-md screens
+                    overlay.classList.toggle('hidden');
+                });
+
+                 overlay.addEventListener('click', function() {
+                    sidebar.classList.add('translate-x-full'); // For non-md screens
+                    overlay.classList.add('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
