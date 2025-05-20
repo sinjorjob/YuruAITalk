@@ -2,7 +2,7 @@
 
 ## Youtubeチャネルの紹介PVサイト
 
-xxxxx
+[ゆるっとAI対談室](https://sinjorjob.github.io/YuruAITalk/)
 
 ## Youtubeチャンネルサイト
 
